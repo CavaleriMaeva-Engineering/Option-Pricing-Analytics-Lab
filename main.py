@@ -2,7 +2,7 @@ import numpy as np
 from core.vanilla import CallOption, PutOption
 from matplotlib import pyplot as plt
 
-def main():
+def main() :
   #Création des options
   mon_call=CallOption(100,1,5.0)
   mon_put=PutOption(100,1,5.0)

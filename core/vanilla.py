@@ -10,7 +10,7 @@ class CallOption(Option) :
   à l'échéance (s_T) est supérieur au strike (K).
   """
 
-  def __init__(self,strike,expiry,premium):
+  def __init__(self,strike,expiry,premium) :
     super().__init__(strike,expiry,premium)
 
   def payoff(self,spot) :
@@ -28,7 +28,7 @@ class PutOption(Option) :
   à l'échéanc (s_T) tombe en dessous du strike (K).
   """
   
-  def __init__(self,strike,expiry,premium):
+  def __init__(self,strike,expiry,premium) :
     """
     Calcule le gain brut à l'échéance pour un Put.
     """
