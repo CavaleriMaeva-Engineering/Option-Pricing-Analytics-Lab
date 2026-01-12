@@ -17,7 +17,7 @@ class CallOption(Option) :
     """
     Calcule le gain brut à l'échéance pour un Call.
     """
-    return np.maximum(0,spot-self.K)
+    return np.maximum(0,spot[-1]-self.K)
 
 class PutOption(Option) :
   """
@@ -35,4 +35,4 @@ class PutOption(Option) :
     super().__init__(strike,expiry,premium)
 
   def payoff(self,spot) :
-     return np.maximum(0,self.K-spot)
+     return np.maximum(0,self.K-spot[-1])

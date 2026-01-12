@@ -1,44 +1,58 @@
 import numpy as np
 from core.vanilla import CallOption, PutOption
+from core.exotic import AsianOption, BarrierOption, LookBackOption, ChooserOption, BinaryOption, ForwardStartOption
 from matplotlib import pyplot as plt
 
 def main() :
-  #Création des options
-  mon_call=CallOption(100,1,5.0)
-  mon_put=PutOption(100,1,5.0)
+    
+    #Création d'une trajectoire de prix fictive
+    price_path = np.array([100, 102, 104, 108, 107, 112, 115, 113, 110, 112])
+    
+    #Paramètres de tests communs
+    K=105        
+    T=1         
+    H=114       
+    
+    #Création d'un portfolio d'options de test
+    portfolio=[
+        CallOption(strike=K,expiry=T,premium=5.0),
+        PutOption(strike=K,expiry=T,premium=5.0),
+        
+        AsianOption(strike=K,expiry=T,is_call=True,average_type='arithmetic'),
+        AsianOption(strike=K,expiry=T,is_call=True,average_type='geometric'),
+        
+        #Up-and-Out Call : Meurt si on touche 114 (ce qui arrive au jour 7 avec 115)
+        BarrierOption(strike=K,expiry=T,barrier=H,is_knock_in=False,is_up=True),
+        
+        LookBackOption(strike=K,expiry=T,type_option='Fixe',is_call=True),
+        LookBackOption(strike=None,expiry=T,type_option='Flottant',is_call=True),
+        
+        #Le choix se fait à l'index 4 (prix=107)
+        ChooserOption(strike=K, expiry=T, choice_index=4),
+        
+        BinaryOption(strike=K, expiry=T, payout=50.0, is_call=True),
+        
+        #Le strike se fixe à l'index 2 (prix=104)
+        ForwardStartOption(expiry=T,fixing_index=2,is_call=True)
+    ]
+    
+    #Boucle de test
+    print("="*50)
+    print(f"TRAJECTOIRE DE TEST : {price_path}")
+    print(f"STRIKE DE RÉFÉRENCE : {K}")
+    print("="*50)
+    print(f"{'TYPE OPTION':<25} | {'PAYOFF':<10}")
+    print("-"*50)
+    
+    for option in portfolio :
+        name=option.__class__.__name__
+        try :
+            result=option.payoff(price_path)
+            print(f"{name:<25} | {result:>10.2f}")
+        except Exception as e:
+            print(f"{name:<25} | ERREUR : {e}")
+    print("="*50)
 
-  #Scénarios de prix à l'échéance (S_T)
-  S_T=np.array([80, 90, 100, 110, 120])
-
-
-  #Calcul des payoffs
-  gains_call=mon_call.payoff(S_T)
-  gains_put=mon_put.payoff(S_T)
-
-  #Calcul des P&L
-  pnl_call=gains_call-mon_call.P
-  pnl_put=gains_put-mon_put.P
-  
-  
-  #Affichage des résultats
-  print(f"Prix du marché : {S_T}")
-  print(f"Gains du Call  : {gains_call}")
-  print(f"Gains du Put   : {gains_put}")
-  
-  #Visualisation
-  plt.figure(figsize=(10, 6)) # Pour que le graphique soit grand
-  plt.plot(S_T,pnl_call,label="P&L Call",color='blue')
-  plt.plot(S_T,pnl_put,label="P&L Put",color='green')
-  
-  plt.axhline(0, color='black',linewidth=1.5)
-  plt.axvline(mon_call.K,color='red',linestyle='--',alpha=0.5)
-  
-  plt.title("Profil de Profit et Perte (P&L) à l'échéance")
-  plt.xlabel("Prix de l'action à l'échéance (S_T)")
-  plt.ylabel("Profit / Perte net(te)")
-  plt.grid(True,alpha=0.3) 
-  plt.legend()
-  plt.show()
   
 if __name__=="__main__":
   main()

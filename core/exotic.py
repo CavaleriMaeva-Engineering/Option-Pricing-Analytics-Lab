@@ -156,8 +156,8 @@ class ForwardStartOption(Option) :
     à une date intermédiaire (fixing_index) en fonction du cours du sous-jacent.
     """
     
-    def __init__(self,strike,expiry,fixing_index,premium=0.0,is_call=True) :
-        super().__init__(self,None,expiry,premium)
+    def __init__(self,expiry,fixing_index,premium=0.0,is_call=True) :
+        super().__init__(0.0,expiry,premium)
         self.fixing_index=fixing_index
         self.is_call=is_call
         
