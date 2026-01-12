@@ -2,19 +2,7 @@ import numpy as np
 
 class GBMSimulator :
     """
-    Cette classe implémente le simulateur de Mouvement Brownien Géométrique (GBM).
-    
-    Elle permet de générer des trajectoires de prix pour un actif sous-jacent de manière 
-    vectorisée avec NumPy. Ces simulations servent de base au pricing par la méthode 
-    de Monte-Carlo pour les options dépendantes du sentier (Path-Dependent).
-
-    Attributs:
-        S0 (float): Prix initial de l'actif (Spot).
-        r (float): Taux d'intérêt sans risque annuel (Drift).
-        sigma (float): Volatilité annuelle du sous-jacent (Diffusion).
-        T (float): Horizon temporel en années.
-        num_steps (int): Nombre de pas de discrétisation temporelle.
-        num_simulations (int): Nombre de scénarios (mondes parallèles) à générer.
+    Cette classe
     """
     
     def __init__(self,S0,r,sigma,T,num_steps,num_simulations) :

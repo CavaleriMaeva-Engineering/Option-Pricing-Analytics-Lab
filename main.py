@@ -72,7 +72,7 @@ def main() :
     sim=GBMSimulator(S0,r,sigma,T,num_steps,num_sim)
     
     # On génère la matrice de prix (100 000 lignes)
-    simulated_paths = sim.simulate_paths()
+    simulated_paths=sim.simulate_paths()
     
     # Si je veux le prix d'un Asian Call aujourd'hui :
     mon_asiatique=AsianOption(strike=105,expiry=T,is_call=True)
