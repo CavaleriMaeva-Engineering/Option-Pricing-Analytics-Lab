@@ -101,14 +101,73 @@ class LookBackOption(Option) :
                 return spot[-1]-np.min(spot)
             else :
                 return np.max(spot)-spot[-1]
+
+class ChooserOption(Option) :
+    """
+    Cette classe implémente l'option Chooser.
+    
+    À une date prédéterminée (choice_index), le détenteur décide si l'option 
+    devient un Call ou un Put européen avec le même strike et la même échéance.
+    C'est un produit particulièrement utile en période de forte incertitude sur 
+    la direction du marché.
+    """
+    
+    def __init__(self,strike,expiry,choice_index,premium=0.0) :
+        super().__init__(strike,expiry,premium)
+        self.choice_index=choice_index
+    
+    def payoff(self,spot):
+        price_at_choice=spot[self.choice_index]
+        if price_at_choice>self.K :
+            return np.maximum(0,spot[-1]-self.K)
+        else :
+            return np.maximum(0,self.K-spot[-1])
+            
+
+class BinaryOption(Option) :
+    """
+    Cette classe implémente l'option binaire (ou digitale).
+    Contrairement aux options classiques, elle ne verse pas la différence de prix,
+    mais un montant fixe (payout) si l'option expire dans la monnaie (In-the-money).
+    """
+    
+    def __init__(self,strike,expiry,payout,premium=0.0,is_call=True) :
+        super().__init__(strike,expiry,premium)
+        self.payout=payout
+        self.is_call=is_call
         
-            
-            
+    def payoff(self,spot) :
+        if self.is_call :
+            if spot[-1]>self.K :
+                return self.payout
+            else :
+                return 0
+        else :
+            if self.K>spot[-1] :
+                return self.payout
+            else :
+                return 0
             
     
+class ForwardStartOption(Option) :
+    """
+    Cette classe implémente l'option Forward Start.
+    Le prix d'exercice (Strike) n'est pas fixé à l'origine mais est déterminé 
+    à une date intermédiaire (fixing_index) en fonction du cours du sous-jacent.
+    """
+    
+    def __init__(self,strike,expiry,fixing_index,premium=0.0,is_call=True) :
+        super().__init__(self,None,expiry,premium)
+        self.fixing_index=fixing_index
+        self.is_call=is_call
         
         
-        
+    def payoff(self,spot) :
+        K_dynamique=spot[self.fixing_index]
+        if self.is_call :
+            return np.maximum(0,spot[-1]-K_dynamique)
+        else :
+            return np.maximum(0,K_dynamique-spot[-1])
         
         
         
