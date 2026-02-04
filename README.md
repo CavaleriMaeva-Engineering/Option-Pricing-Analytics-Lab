@@ -53,9 +53,8 @@ core/
 ├── simulator.py  # GBM Stochastic trajectory engine
 └── pricer.py     # Monte-Carlo valuation hub
 ```
-
-## Career Objective
+--- 
+**Career Objective:**
 Aspiring **Quantitative Researcher / Developer**. Currently seeking an internship in Quantitative Finance starting in **Fall 2026**. I am focused on bridging the gap between advanced mathematical models and high-performance software implementation.
 
----
 **Contact**: Maéva Cavaleri - [cavalerimaeva@gmail.com](mailto:cavalerimaeva@gmail.com)
